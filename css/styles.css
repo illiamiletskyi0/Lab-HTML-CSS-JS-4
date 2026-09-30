@@ -223,9 +223,14 @@ a {
   font-size: 15px;
 }
 
-.promo strong {
+.promo__title {
   display: block;
+  margin: 0 0 4px;
   font-size: 19px;
+}
+
+.promo__text {
+  margin: 0;
 }
 
 /* Hero */

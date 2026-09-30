@@ -77,9 +77,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
   window.addEventListener('load', function () {
     setTimeout(function () {
-      var promo = document.createElement('div');
+      var promo = document.createElement('aside');
       promo.className = 'promo';
-      promo.innerHTML = '<strong>Autumn offer</strong> 3 months of Pro for the price of one. <a href="#pricing">See plans</a>';
+      promo.setAttribute('aria-labelledby', 'promo-title');
+      promo.innerHTML = '<h2 class="promo__title" id="promo-title">Autumn offer</h2>'
+        + '<p class="promo__text">3 months of Pro for the price of one. '
+        + '<a href="#pricing">See plans</a></p>';
       document.body.insertBefore(promo, document.body.firstChild);
     }, 800);
   });
