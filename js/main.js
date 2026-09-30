@@ -2,27 +2,12 @@
 
 document.addEventListener('DOMContentLoaded', function () {
 
-  /* Header navigation */
-
-  document.querySelectorAll('.nav-item').forEach(function (item) {
-    item.addEventListener('click', function () {
-      var section = document.getElementById(item.getAttribute('data-target'));
-      if (section) {
-        section.scrollIntoView({ behavior: 'smooth' });
-      }
-    });
-  });
+  /* Header navigation now uses real anchors (#features, #pricing, …),
+     so no click-only handler is needed here. */
 
   /* Sign-up flow */
 
   function startSignup() {
-    // Pre-compute the plan comparison so the trial section renders instantly.
-    var started = Date.now();
-    var total = 0;
-    while (Date.now() - started < 300) {
-      total += Math.sqrt(total + 1);
-    }
-
     var trial = document.getElementById('trial');
     if (trial) {
       trial.scrollIntoView({ behavior: 'smooth' });
@@ -45,16 +30,37 @@ document.addEventListener('DOMContentLoaded', function () {
 
   var trialSubmit = document.getElementById('trial-submit');
   if (trialSubmit) {
-    trialSubmit.addEventListener('click', function () {
-      var form = document.getElementById('trial-form');
-      var email = form.querySelector('input[name="email"]');
+    var form = document.getElementById('trial-form');
+    var email = form.querySelector('input[name="email"]');
+    var error = document.getElementById('trial-error');
 
+    function showError() {
+      error.hidden = false;
+      email.setAttribute('aria-invalid', 'true');
+      email.style.boxShadow = '0 0 0 2px #fca5a5';
+      email.focus();
+    }
+
+    function clearError() {
+      error.hidden = true;
+      email.removeAttribute('aria-invalid');
+      email.style.boxShadow = '';
+    }
+
+    trialSubmit.addEventListener('click', function () {
       if (!email.value) {
-        email.style.boxShadow = '0 0 0 2px #fca5a5';
+        showError();
         return;
       }
 
+      clearError();
       form.innerHTML = '<p>Thanks — check your inbox, the workspace is being created.</p>';
+    });
+
+    email.addEventListener('input', function () {
+      if (email.value) {
+        clearError();
+      }
     });
   }
 
@@ -62,7 +68,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
   document.querySelectorAll('.faq__q').forEach(function (question) {
     question.addEventListener('click', function () {
-      question.parentElement.classList.toggle('is-open');
+      var isOpen = question.parentElement.classList.toggle('is-open');
+      question.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
     });
   });
 
